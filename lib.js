@@ -161,7 +161,12 @@ exports.addPreviewComment = async function (
       .map((obj) => `<li><a href='${makeDownloadUrl(obj)}'>${path.basename(obj)}</a></li>`)
       .join(os.EOL);
     const body = `${commentTitle} - [${s3Location}]${os.EOL}<ul>${os.EOL}${links}${os.EOL}</ul>`;
-    await octokit.graphql(`mutation{addComment(input:{subjectId:"${pullRequestId}",body:"${body}"}){subject{id}}}`);
+    const query = `mutation{addComment(input:{subjectId:"${pullRequestId}",body:"${body}"}){subject{id}}}`;
+    console.log(`> add comment ---- ${commentTitle}`);
+    console.log(body);
+    console.log('> --------------------------------');
+    console.log(query);
+    await octokit.graphql(query);
   }
 };
 

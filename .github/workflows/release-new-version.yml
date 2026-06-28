@@ -6,21 +6,19 @@ on:
       - alpha/v*/v*
       - release/v*/v*
 
+permissions:
+  contents: write
+  packages: write
+  issues: write
+  pull-requests: write
+
 jobs:
-  bump:
+  release:
     if: ${{ github.event.pull_request.merged }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Setup NPM registry
-        uses: actions/setup-node@v2
-        with:
-          registry-url: 'https://npm.pkg.github.com'
-          scope: '@kungfu-trader'
-
-      - name: Bump Version
-        uses: kungfu-trader/action-bump-version@v3
-        with:
-          token: ${{ secrets.KUNGFU_GITHUB_TOKEN }}
+    uses: kungfu-systems/workflows/.github/workflows/.release-new-version.yml@v2.0-alpha
+    with:
+      publish-aws-ci: false
+      publish-aws-user: false
+      action-bump-version-ref: v4.0-alpha
+    secrets:
+      GITHUB_PUSH_TOKEN: ${{ secrets.KUNGFU_GITHUB_TOKEN }}
